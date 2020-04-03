@@ -1,0 +1,24 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: stream-customer-2
+  cloud:
+    stream:
+      bindings:
+        input1:
+          destination: test1.message
+          content-type: application/json
+        input2:
+          destination: test2.message
+          content-type: application/json
+          group: Group-Boy
+        input3:
+          destination: test3.message
+          content-type: application/json
+          group: Group-Boy
+          consumer:
+            partitioned: true
+      instance-index: 0  #���Ǹ�������������Ϣ
+      instance-count: 2  #������
+

@@ -1,0 +1,28 @@
+server:
+  port: 18089
+spring:
+  profiles:
+    active: dev
+  application:
+    name: stream-rabbit-customer-new
+  cloud:
+    stream:
+      function:
+        definition:  receive1;receive2;receive3
+      bindings:
+        #in和out对应于结合的类型（如输入或输出）。0是输入或输出的结合的索引。典型的单个输入/输出函数始终为0
+        receive1-in-0:
+          destination: test1.message
+        receive2-in-0:
+          destination: test2.message
+          group: Group-Boy
+        receive3-in-0:
+          destination: test3.message
+          group: Group-Boy
+      instance-index: 0  #用那个分区来接收消息
+      instance-count: 2  #分区数
+
+
+
+
+

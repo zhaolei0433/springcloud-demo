@@ -1,0 +1,29 @@
+server:
+  port: 18083
+spring:
+  profiles:
+    active: dev
+  application:
+    name: stream-producer-new
+  cloud:
+    stream:
+      function:
+        definition:  processor1;processor2;processor3
+      bindings:
+          #in和out对应于结合的类型（如输入或输出）。0是输入或输出的结合的索引。典型的单个输入/输出函数始终为0
+        processor1-out-0:
+          destination: test1.message
+        processor2-out-0:
+          destination: test2.message
+          group: Group-Boy
+        processor3-out-0:
+          destination: test3.message
+          group: Group-Boy
+            #设置分区键的表达式规则和设置消息分区数量
+          producer:
+            #这个是分区表达式, 例如当表达式的值为1, 那么在订阅者的instance-index中为1的接收方, 将会执行该消息.
+            partitionKeyExpression: headers['partitionKey']
+            #分区数
+            partitionCount: 2
+
+

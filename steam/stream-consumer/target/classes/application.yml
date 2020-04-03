@@ -1,0 +1,27 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: stream-customer
+  cloud:
+    stream:
+      bindings:
+        input1: #这里的input1需要与接口中@Input中的value值对应，才能实现消息的消费
+          destination: test1.message #这里主要用于中间件Exchange的描述，如果不写则默认用input1代替
+          content-type: application/json #声明内容格式
+        input2:
+          destination: test2.message
+          content-type: application/json
+          group: Group-Boy #消费者的分组信息
+        input3:
+          destination: test3.message
+          content-type: application/json
+          group: Group-Boy
+          consumer:
+            partitioned: true #是否分区
+        input4:
+          destination: test4.message
+          content-type: application/json
+      instance-index: 1  #用那个分区来接收消息
+      instance-count: 2  #分区数
+

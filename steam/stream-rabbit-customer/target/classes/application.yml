@@ -1,0 +1,12 @@
+server:
+  port: 18088
+spring:
+  profiles:
+    active: dev
+  application:
+    name: stream-rabbit-customer
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: default.messages
