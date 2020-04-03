@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: UserService
+  cloud:
+    consul:
+      host: 139.159.177.48
+      port: 8500
+      config:
+        enabled: true
+        #YAML 表示consul中的key-value中的value内容，采用YAML格式
+        format: YAML
+        #config 表示consul用于存储配置的文件夹根目录名为config
+        prefix: config
+        #表示consul上面的KEY值(或者说文件的名字) 默认是data
+        data-key: data
+        #是否启动快速失败功能，功能开启则优先判断config server是否正常
+        fail-fast: true
+        #表示如果有多个profile(eg: 开发环境dev，测试环境test...) ，则key名中的profile与defaultContext之间，用什么分隔符来表示
+        profileSeparator: ','
+      discovery:
+        #实例唯一性
+        instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        #健康检查时间间隔
+        healthCheckInterval: 10s
+        #健康检查失败多长时间后，取消注册
+        health-check-critical-timeout: 30s
+        #健康检查路径
+        health-check-path: /health
+        #开启健康检查
+        heartbeat:
+          enabled: true

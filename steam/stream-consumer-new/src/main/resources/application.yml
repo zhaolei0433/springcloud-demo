@@ -1,0 +1,41 @@
+server:
+  port: 18082
+spring:
+  profiles:
+    active: dev
+  application:
+    name: stream-customer-new
+  cloud:
+    stream:
+      function:
+        #这里的值要与监听的bean名称对应
+        definition:  receive1;receive2;receive3;aggregate
+      bindings:
+          #in和out对应于结合的类型（如输入或输出）。0是输入或输出的结合的索引。典型的单个输入/输出函数始终为0
+        receive1-in-0:
+          destination: test1.message
+          group: Group-Boy
+        receive2-in-0:
+          destination: test2.message
+          group: Group-Boy
+        receive3-in-0:
+          destination: test3.message
+          group: Group-Boy
+        aggregate-in-0:
+          destination: aggregate.in0
+        aggregate-in-1:
+          destination: aggregate.in1
+        aggregate-out-0:
+          destination: test1.message
+      instance-index: 0  #用那个分区来接收消息
+      instance-count: 2  #分区数
+      rabbit:
+        bindings:
+          #DLQ-死信队列队列配置。会生成一个名为test1.message.Group-Boy.dlq的队列记录消息接收中的异常消息，并记录其他异常数据。
+          receive1-in-0 :
+            consumer:
+              auto-bind-dlq: true
+              #处理消息的尝试次数
+              max-attempts: 1
+
+

@@ -1,0 +1,27 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: stream-producer
+  cloud:
+    stream:
+      bindings:
+        output1:
+          destination: test1.message
+          content-type: application/json
+        output2:
+          destination: test2.message
+          content-type: application/json
+          group: Group-Boy
+        output3:
+          #这个是消息沟通的通道, 如果使用了消息分组和分区, 则需要设置该属性, 而且也要一致, 否则消息的接收方接收不到发送方发送的消息.
+          destination: test3.message
+          content-type: application/json
+          #当接收方有多个实例在运行的时候, 如果只想消息被处理一次(不管被那个实例处理), 则需要设置这个组, 例如, 在发布方发布一个消息(赵老师让班上3组的一个小朋友今天下课后帮忙把黑板檫了, 那么如果设置了这个组, 意思就是3组的任何一个小朋友檫黑板就行了, 而不用全部去檫).
+          group: Group-Boy
+          #设置分区键的表达式规则和设置消息分区数量
+          producer:
+            #这个是分区表达式, 例如当表达式的值为1, 那么在订阅者的instance-index中为1的接收方, 将会执行该消息.
+            partitionKeyExpression: headers['partitionKey']
+            #分区数
+            partitionCount: 2
